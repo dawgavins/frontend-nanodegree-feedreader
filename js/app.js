@@ -32,6 +32,7 @@ function init() {
     loadFeed(0);
 }
 
+
 /* This function performs everything necessary to load a
  * feed using the Google Feed Reader API. It will then
  * perform all of the DOM operations required to display
@@ -98,7 +99,8 @@ $(function() {
         feedList = $('.feed-list'),
         feedItemTemplate = Handlebars.compile($('.tpl-feed-list-item').html()),
         feedId = 0,
-        menuIcon = $('.menu-icon-link');
+        menuIcon = $('.menu-icon-link'),
+        addFeedButton = $('#add-feed-button');
 
     /* Loop through all of our feeds, assigning an id property to
      * each of the feeds based upon its index within the array.
@@ -131,4 +133,35 @@ $(function() {
     menuIcon.on('click', function() {
         $('body').toggleClass('menu-hidden');
     });
+
+    /* When the add feed button is clicked on, we need to create a new
+     * feed structure, add it to the global feed list and add a new entry
+     * to the DOM (under the feedList)
+     */
+    addFeedButton.on('click', function() {
+
+        // retrieve the name and url strings from the input fields
+        var newFeedName = $('#add-feed-input-name').val();
+        var newFeedURL = $('#add-feed-input-url').val();
+
+        // create the newFeed structure to match the existing feeds in allFeeds
+        var newFeed = {
+            name : $('#add-feed-input-name').val(), 
+            url: $('#add-feed-input-url').val(), 
+            id: feedId
+        };
+
+        // add a new feed to allFeeds
+        allFeeds.push( newFeed );
+
+        // add the same new feed to the feedList
+        feedList.append(feedItemTemplate(newFeed));
+
+        // increment the feed count
+        feedId++;
+
+        // empty the input strings so they're ready for more input
+        $('#add-feed-input-name').val("");
+        $('#add-feed-input-url').val("");
+    })
 }());

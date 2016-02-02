@@ -9,7 +9,7 @@
  * to ensure they don't run until the DOM is ready.
  */
 $(function() {
-    
+
     /* This is our first test suite - a test suite just contains
     * a related set of tests. This suite is all about the RSS
     * feeds definitions, the allFeeds variable in our application.
@@ -17,11 +17,7 @@ $(function() {
     describe('RSS Feeds', function() {
         // This is our first test - it tests to make sure that the
         // allFeeds variable has been defined and that it is not
-        // empty. Experiment with this before you get started on
-        // the rest of this project. What happens when you change
-        // allFeeds in app.js to be an empty array and refresh the
-        // page?
-        //
+        // empty.
         it('are defined', function() {
             // ensure that there is at least one feed defined and non-empty
             expect(allFeeds).toBeDefined();
@@ -29,10 +25,8 @@ $(function() {
         });
 
 
-        // A test that loops through each feed
-        // in the allFeeds object and ensures it has a URL defined
-        // and that the URL is not empty.
-        //
+        // A test that loops through each feed in the allFeeds object and ensures it 
+        // has a URL defined and that the URL is not empty.
          it('url defined', function() {
             // for each feed...
             allFeeds.forEach(function(feed) {
@@ -43,10 +37,8 @@ $(function() {
          });
 
 
-        // A test that loops through each feed
-        // in the allFeeds object and ensures it has a name defined
-        // and that the name is not empty.
-        //
+        // A test that loops through each feed in the allFeeds object and ensures it 
+        // has a name defined and that the name is not empty.
         it('name defined', function() {
             // for each feed...
             allFeeds.forEach(function(feed) {
@@ -55,6 +47,53 @@ $(function() {
                 expect(feed.name.length).not.toBe(0);
             });
          });
+
+        // A test that ensures clicking on the "add feed" button properly adds an
+        // entry to the allFeeds array
+        it('can add feeds', function() {
+            // set up the new test feed's name and URL
+            var newFeedName = 'CBC Top Stories';
+            var newFeedURL = 'http://rss.cbc.ca/lineup/topstories.xml';
+
+            // simulate the user typing in our pre-defined test name and url
+            $('#add-feed-input-name').val(newFeedName);
+            $('#add-feed-input-url').val(newFeedURL);
+
+            // simulate the user clicking the "add feed" button
+            $('#add-feed-button').trigger('click');
+
+            // use foundNewFeed to track whether or not we find the new feed in our data (allFeeds)
+            var foundNewFeed = false;
+
+            // go through our list of feeds and ensure we can find the newly added one
+            allFeeds.forEach(function(feed) {
+                // if we can match the new feed name and URL, the new feed has been added properly
+                if(feed.name === newFeedName && feed.url == newFeedURL) {
+                    foundNewFeed = true;
+                    newFeedId = feed.id;
+                }
+            });
+            // expect that the new feed was found in our list of feed sources
+            expect(foundNewFeed).toBe(true);
+
+            //------------------------------------------------------------------------------------------
+
+            // now, use foundNewFeed again to track whether or not we find the new feed in the side menu
+            // initialize to false, before we search for the new feed in the menu
+            foundNewFeed = false;
+
+            // search through each "a" item in the feed-list
+            $('.feed-list a').each(function(i, elem) {
+                // if the text matches the one we just added, we have successfully added the new feed
+                // to the feed menu!
+                if(elem.innerHTML === newFeedName) {
+                     foundNewFeed = true;
+                }
+            });
+            // expect that the new feed was found in the side menu
+            expect(foundNewFeed).toBe(true);
+        });
+
     });
 
     /* A test suite for the menu */
