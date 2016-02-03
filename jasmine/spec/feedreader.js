@@ -47,54 +47,8 @@ $(function() {
                 expect(feed.name.length).not.toBe(0);
             });
          });
-
-        // A test that ensures clicking on the "add feed" button properly adds an
-        // entry to the allFeeds array
-        it('can add feeds', function() {
-            // set up the new test feed's name and URL
-            var newFeedName = 'CBC Top Stories';
-            var newFeedURL = 'http://rss.cbc.ca/lineup/topstories.xml';
-
-            // simulate the user typing in our pre-defined test name and url
-            $('#add-feed-input-name').val(newFeedName);
-            $('#add-feed-input-url').val(newFeedURL);
-
-            // simulate the user clicking the "add feed" button
-            $('#add-feed-button').trigger('click');
-
-            // use foundNewFeed to track whether or not we find the new feed in our data (allFeeds)
-            var foundNewFeed = false;
-
-            // go through our list of feeds and ensure we can find the newly added one
-            allFeeds.forEach(function(feed) {
-                // if we can match the new feed name and URL, the new feed has been added properly
-                if(feed.name === newFeedName && feed.url == newFeedURL) {
-                    foundNewFeed = true;
-                    newFeedId = feed.id;
-                }
-            });
-            // expect that the new feed was found in our list of feed sources
-            expect(foundNewFeed).toBe(true);
-
-            //------------------------------------------------------------------------------------------
-
-            // now, use foundNewFeed again to track whether or not we find the new feed in the side menu
-            // initialize to false, before we search for the new feed in the menu
-            foundNewFeed = false;
-
-            // search through each "a" item in the feed-list
-            $('.feed-list a').each(function(i, elem) {
-                // if the text matches the one we just added, we have successfully added the new feed
-                // to the feed menu!
-                if(elem.innerHTML === newFeedName) {
-                     foundNewFeed = true;
-                }
-            });
-            // expect that the new feed was found in the side menu
-            expect(foundNewFeed).toBe(true);
-        });
-
     });
+
 
     /* A test suite for the menu */
     describe('The menu', function() {
@@ -151,11 +105,11 @@ $(function() {
         // a test that ensures when a new feed is loaded
         // by the loadFeed function that the content actually changes.
 
-         // Overall plan:
-         // cue the first feed to load, store the content of the first entry in origContent
-         // once it has loaded, and then cue the second feed to load, waiting for
-         // completion before moving on to the test below, where we compare the text contained
-         // within the first entry's h2 element
+        // Overall plan:
+        // cue the first feed to load, store the content of the first entry in origContent
+        // once it has loaded, and then cue the second feed to load, waiting for
+        // completion before moving on to the test below, where we compare the text contained
+        // within the first entry's h2 element
         
         // store the text of the first headline of the first feed in origContent
         var origContent = null;
@@ -192,6 +146,62 @@ $(function() {
             // both newContent and origContent will be null, and the test will fail
             expect(newContent !== origContent).toBe(true);
         });
+    });
+
+    /* Additional testing - a test suite for user-added feeds */
+    describe('User-added feeds', function() {
+
+        // set up the new test feed's name and URL
+        var newFeedName = 'CBC Top Stories';
+        var newFeedURL = 'http://rss.cbc.ca/lineup/topstories.xml';
+
+        beforeEach(function() {
+            // simulate the user typing in our pre-defined test name and url
+            $('#add-feed-input-name').val(newFeedName);
+            $('#add-feed-input-url').val(newFeedURL);
+
+            // simulate the user clicking the "add feed" button
+            $('#add-feed-button').trigger('click');
+        });
+
+        // A test that ensures clicking on the "add feed" button properly adds an
+        // entry to the allFeeds array
+        it('added feeds appear in allFeeds array', function() {
+
+            // use foundNewFeed to track whether or not we find the new feed in our data (allFeeds)
+            var foundNewFeed = false;
+
+            // go through our list of feeds and ensure we can find the newly added one
+            allFeeds.forEach(function(feed) {
+                // if we can match the new feed name and URL, the new feed has been added properly
+                if(feed.name === newFeedName && feed.url === newFeedURL) {
+                    foundNewFeed = true;
+                }
+            });
+            // expect that the new feed was found in our list of feed sources
+            expect(foundNewFeed).toBe(true);
+        });
+
+        // A test that ensures clicking on the "add feed" button properly adds an
+        // entry to the allFeeds array
+        it('added feeds appear in menu', function() {
+
+            // use foundNewFeed to track whether or not we find the new feed in the side menu
+            // initialize to false, before we search for the new feed in the menu
+            var foundNewFeed = false;
+
+            // search through each "a" item in the feed-list
+            $('.feed-list a').each(function(i, elem) {
+                // if the text matches the one we just added, we have successfully added the new feed
+                // to the feed menu!
+                if(elem.innerHTML === newFeedName) {
+                     foundNewFeed = true;
+                }
+            });
+            // expect that the new feed was found in the side menu
+            expect(foundNewFeed).toBe(true);
+        });
+
     });
 
 }());
