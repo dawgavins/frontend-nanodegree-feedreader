@@ -41,7 +41,7 @@ function init() {
  * This function all supports a callback as the second parameter
  * which will be called after everything has run successfully.
  */
- function loadFeed(id, cb) {
+function loadFeed(id, cb) {
      var feedUrl = allFeeds[id].url,
          feedName = allFeeds[id].name;
 
@@ -134,7 +134,8 @@ $(function() {
         $('body').toggleClass('menu-hidden');
     });
 
-    /* When the add feed button is clicked on, we need to create a new
+    /* New Functionality - add feed!
+     * When the add feed button is clicked on, we need to create a new
      * feed structure, add it to the global feed list and add a new entry
      * to the DOM (under the feedList)
      */
